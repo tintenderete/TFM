@@ -1,0 +1,69 @@
+1º CONSEGUIR DATOS / GUARDAR DATOS
+- Precios diarios de cierre ajustados historicos de diferentes fuentes: Yahoo finance, investing, BME.  
+- Guardar en github o drive
+
+IBEX35
+- Tenemos Composicion historica ALE y compo BME
+- Tenemos Historicos cotizacion yahoo y BME
+
+2º HOMOGENEIZAR DATOS
+
+- Composicion   :  indice:  idx             , columnas : fecha, Activo, entradaALE, entradaBME, salidasALE, salidaBME
+- Cotizacion    :  indices: 1991/04/01      , columnas : tickers unicos de ambos csv 
+
+3º LIMPIEZA DATOS <- > VISUALIZACION DE DATOS
+
+    - COMPOSICION:
+
+        - que fechas tiene uno y no tiene otro
+        - que fechas tienen ambos y no coinciden
+        - diferencia entre fechas divergentes entre datasets
+        - coherencia temporal 
+
+        - VISUALIZAR 
+
+    - COTIZACION:
+        - cantidad de nans pos ejemplo anual
+        - que retornos tiene uno y no tiene otro
+        - que retornos tienen ambos y no coinciden
+        - diferencia entre precios divergentes entre datasets
+
+        - VISUALIZAR: 
+    
+4º ANALISIS DATOS <- > VISUALIZACION DE DATOS
+
+    - COMPOSICION:
+        - tiempo dentro del indice
+        - numero de cambios
+        - numero de veces que entro y salio un activo 
+
+    - COTIZACION:
+        - retornos, value risk, max dropdown, media, desviacion  
+        - analisis (anual) mensual, semanas, diarios
+        - valores macro como oro, cobre, gas, indice SP500 , indice IBEX, indiceEUROSTOX
+
+
+----- > En este punto tenemeos:
+    - nombres de activos normalizado
+    - CSV COMPOSICION con nombres de activos normalizado, con todos las salidas y entradas de cada uno
+    - CSV COTIZACION con nombres de activos normalizado, con todos los retornos en fechas donde corresponden.
+
+    ¡  HAY QUE DECIDIR QUE DATO TOMAR CUANDO HAY DIVERGENCIAS !
+
+
+5º PREPARAR DATOS ENTRENAMIENTO
+    - COTIZAION
+
+        - tabla con X filas, cada columna es una participante del mercado en algun momento ( normalizado ). y cada fila es un dia.
+            - los activos si tienen precio se pone este o no este en indice
+            - (-1) en precio si no existe y (35) en y
+            
+        - tabla auxliar
+            - que marca con 0 total confianza, y un 1 si no confiamos en el dato
+
+
+6º ENTRENEAR MODELO / ENTRENAR EVOLUTIVO < - > VALIDAR
+
+7º ANALIZAR RESULTADOS <-> VISUALIZACION RESULTADOS
+
+8º INTEPRETABILIDAD <-> INVERSION
