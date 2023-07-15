@@ -66,6 +66,13 @@ IBEX35
 
 6º ENTRENEAR MODELO / ENTRENAR EVOLUTIVO < - > VALIDAR
 
+    - EVO Seleccion: val_loss 
+    
+
 7º ANALIZAR RESULTADOS <-> VISUALIZACION RESULTADOS
+    -  Valoramos una mejor seleccion 
+        ( no usando beneficios si no la avg o sum de funcio listas (Y))
 
 8º INTEPRETABILIDAD <-> INVERSION
+
+    - ¿ Son coherentes las listas ?  
