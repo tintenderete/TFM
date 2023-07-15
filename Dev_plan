@@ -56,10 +56,12 @@ IBEX35
 
         - tabla con X filas, cada columna es una participante del mercado en algun momento ( normalizado ). y cada fila es un dia.
             - los activos si tienen precio se pone este o no este en indice
-            - (-1) en precio si no existe y (35) en y
+            - (-1) en precio si no existe o es " inventado "
             
         - tabla auxliar
             - que marca con 0 total confianza, y un 1 si no confiamos en el dato
+
+(NOTA: Ranqueamos este o no este en el indice y luego filtramos la prediccion )
 
 
 6º ENTRENEAR MODELO / ENTRENAR EVOLUTIVO < - > VALIDAR
