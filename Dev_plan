@@ -2,6 +2,21 @@
 - Precios diarios de cierre ajustados historicos de diferentes fuentes: Yahoo finance, investing, BME.  
 - Guardar en github o drive
 
+DATOS CONFLICTIVOS:
+
+ACE
+BBV - BBVA
+SEV
+URB
+VAL
+HHU - OHLA.MC en investing
+ZOT - ZOT en investing ( entrar desde google)
+EBA ( estuvo 6 meses en el indice )
+TUB - TUBA en investing
+NHH - NHH en investing
+RED - REDE en investing
+
+
 IBEX35
 - Tenemos Composicion historica ALE y compo BME
 - Tenemos Historicos cotizacion yahoo y BME
