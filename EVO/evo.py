@@ -1,7 +1,10 @@
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, GRU, Dropout, Flatten
 from keras.optimizers import Adam
+from loss_functions import top_is_target_31
+import keras
+from keras import regularizers
 
 class GeneticAlgorithm:
     def __init__(self,
@@ -122,3 +125,102 @@ def fitness_function_keras(population, X, Y, epochs=5):
 def selection_function_keras(population, fitness):
     best_fitness_indices = np.argsort(fitness)[:5]  # Get indices of 5 with lowest fitness
     return population[best_fitness_indices]
+
+ 
+
+class I1_simple_gru:
+    def __init__(self):
+        self.working = True
+
+    def initial_population(self, n_population):
+        
+        def get_ind():
+            ind = [
+                np.random.choice( [1,2,3] ) ,  # n_neurons_gru
+                np.random.choice( [0, 0.1, 0.5] ),    # l1_gru
+                np.random.choice( [0, 0.1, 0.5] ),    # l2_gru
+                np.random.choice( [0,0.1,0.5] ) ,      # dropout
+                np.random.choice( [1,2,3] ) , # n_dense_layers
+                np.random.choice( [1,2,3] ) , # n_neurons_dense
+
+            ]
+            return ind
+
+        pop = []
+
+        for i in range(n_population):
+            pop.append(get_ind())
+
+        return np.array(pop)
+
+    def create_model(self, genes, X_DATA, Y_DATA):
+        
+        n_neurons_gru = genes[0]
+        l1_gru = genes[1]
+        l2_gru = genes[2]
+        do = genes[3]
+        n_dense_layers = genes[4]
+        n_neurons_dense = genes[5]
+
+        inputs = keras.Input(shape=(X_DATA.shape[1:]))
+        m = inputs
+
+        m = GRU(units=int(n_neurons_gru), kernel_regularizer=regularizers.l1_l2(l1=l1_gru, l2=l2_gru))(m)
+
+        m = Dropout(do)(m)
+
+        for _ in range(int(n_dense_layers)):
+            m = Dense(units=int(n_neurons_dense), activation = 'relu')(m)
+
+        m = Flatten()(m)
+
+        # Añadir capa Dense de salida
+        out = Dense(Y_DATA.shape[1], activation='tanh')(m)
+
+        model_GRU = keras.Model(inputs=inputs, outputs=out)
+
+        # Compilar el modelo
+        model_GRU.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01), loss=top_is_target_31,
+                metrics=[])
+
+        return model_GRU
+
+    def fitness_function(self, population , X_TRAIN, Y_TRAIN, X_VALID, Y_VALID, epochs = 2):
+        fitness = np.empty(population.shape[0])
+        for i in range(population.shape[0]):
+            model = self.create_model(population[i],X_TRAIN,Y_TRAIN)
+            history = model.fit(X_TRAIN, Y_TRAIN, epochs=epochs,batch_size=X_TRAIN.shape[0], validation_data = (X_VALID, Y_VALID), verbose=0)
+            fitness[i] = history.history['val_loss'][-1]
+        return fitness
+
+    def selection_function(self, population, fitness, n_ind):
+        best_fitness_indices = np.argsort(fitness)[:n_ind]  # Get indices of 5 with lowest fitness
+        return population[best_fitness_indices]
+
+    def crossover_function(self, parents):
+
+        def uniform_crossover(parent1, parent2):
+            child1, child2 = parent1.copy(), parent2.copy()
+            for i in range(len(parent1)):
+                if np.random.uniform(0, 1) < 0.5:  # Choose randomly
+                    child1[i], child2[i] = child2[i], child1[i]  # Swap elements
+            return child1, child2
+
+        def easy_crossover(parents):
+            parents = parents
+            np.random.shuffle(parents)
+            offspring = []
+            for i in range(0, len(parents), 2):
+
+                parent1 = parents[i]
+                parent2 = parents[i+1]
+
+                childs = uniform_crossover(parent1, parent2 )
+
+                offspring.append(childs[0])
+                offspring.append(childs[1])
+
+            return offspring
+        
+        return easy_crossover(parents)
+
