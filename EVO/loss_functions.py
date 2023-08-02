@@ -2,8 +2,9 @@
 
 from keras import backend as K
 import tensorflow as tf
-
-def top_is_target(y_true, y_pred, hp_top = 10, hp_incremento_top = 2):
+hp_top = 10
+hp_incremento_top = 2
+def top_is_target_31(y_true, y_pred ):
   num_samples = K.shape(y_true)[0]
 
   w = K.arange(31, dtype='float32')
